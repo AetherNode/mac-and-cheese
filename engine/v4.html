@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mac and Cheese</title><meta name="theme-color" content="#000000">
+<meta name="description" content="Mac and Cheese: macro and trend scores from −10 to +10 for indices, metals, oil and bitcoin.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='2' y='2' width='60' height='60' rx='15' fill='%23000' stroke='%23FFD23F' stroke-width='3'/%3E%3Cpath d='M10 48 L22 38 L30 42 L40 28 L47 32 L55 18 L55 48 Z' fill='%23FFD23F'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..800,0..100;1,9..144,300..800,0..100&display=swap" rel="stylesheet">
+<style>%CSS%</style></head><body>
+<div class="grain" aria-hidden="true"></div>
+<header class="top">
+<div class="tk" aria-label="Market ticker, five-day change"><div class="tkt">%TICKER%</div></div>
+<div class="hrow">
+<div class="brand"><svg viewBox="0 0 64 64" width="56" height="56" role="img" aria-label="Mac and Cheese"><rect x="2" y="2" width="60" height="60" rx="15" fill="#000" stroke="#FFD23F" stroke-width="2"/><g transform="translate(7,13.5) scale(.78)"><path d="M4 42 L18 31 L27 35 L40 20 L48 25 L60 8 L60 42 Z" fill="#FFD23F"/><circle cx="46" cy="34" r="4" fill="#000"/><circle cx="30" cy="39" r="2.6" fill="#000"/><circle cx="53" cy="22" r="2.4" fill="#000"/></g></svg>
+<div><div class="wm">Mac <i>&amp;</i> Cheese</div><div class="asof">%ASOF% <span class="age" id="age" data-iso="%ISO%"></span></div></div></div>
+<div class="ck" id="ck" aria-label="Market clocks"></div>
+</div></header>
+<main>
+<section class="hero rv">
+<div class="hl">
+<div class="eyebrow">The board</div>
+<div class="tone">%TONE%</div>
+<p class="line">%LINE%</p>
+<div class="cnt"><div class="cc red"><span>%NS%</span>Shorts</div><div class="cc lime"><span>%NL%</span>Longs</div><div class="cc yel"><span>%NM%</span>Mixed</div></div>
+<div class="br"><div class="brh"><span>Board reading</span><b>%BOARD%</b></div><i class="bsc"><u style="--p:%BOARDP%"></u></i><span class="ends"><em>−10</em><em>0</em><em>+10</em></span>
+<div class="brs">Average Mac %AVGM% · Average Cheese %AVGC%</div></div>
+</div>
+<figure class="hm">%MAP%<figcaption>Mac across, Cheese up. Select a dot to open the asset.</figcaption></figure>
+</section>
+<section class="nw rv" aria-label="Breaking economic news">
+<div class="nh"><span class="brk"><i></i>Breaking</span><span class="nt">Economic news</span><span class="nn" id="nn">1 / %NNEWS%</span></div>
+<div class="ns" id="ns">%NEWS%</div>
+<div class="np" aria-hidden="true"><i id="npb"></i></div>
+</section>
+<section class="bd rv"><h2>Shared backdrop</h2><div class="rgs">%REGIME%</div></section>
+<section class="as" id="assets">
+<h2>Assets</h2>
+<div class="fb" id="fb">
+<div class="tabs" role="tablist" aria-label="Filter">
+<button class="f on" data-f="all">All <i>%NA%</i></button><button class="f l" data-f="long">Longs <i>%NL%</i></button><button class="f s" data-f="short">Shorts <i>%NS%</i></button><button class="f m" data-f="mixed">Mixed <i>%NM%</i></button>
+</div>
+<div class="ctl">
+<div class="seg" aria-label="Sort"><span>Sort</span><button class="o on" data-s="g">Group</button><button class="o" data-s="x">Strength</button><button class="o" data-s="m">Mac</button><button class="o" data-s="c">Cheese</button></div>
+<div class="seg" aria-label="View"><span>View</span><button class="o on" data-v="cards">Cards</button><button class="o" data-v="table">Table</button></div>
+</div></div>
+<div class="tiles" id="tiles">%TILES%</div>
+<div class="list" id="list" hidden><div class="lh"><span>Asset</span><span>Mac</span><span>Cheese</span><span>Reading</span><span>5d</span></div><div id="rows">%ROWS%</div></div>
+<p class="em" id="em" hidden>No assets in this group.</p>
+</section>
+<footer>
+<p>%SOURCES%</p>
+<details class="m"><summary>Method</summary>
+<p>Mac score: each driver votes up, down or neutral against its own recent trend, VIX counts double, summed and scaled to −10 to +10. Lean at 2 or more either way, strong at 4 or more.</p>
+<p>Cheese score: price against its 50-day and 200-day averages, the 50-day against the 200-day, and the 20-day and 5-day moves, scaled to −10 to +10. It never feeds the Mac score.</p>
+<p>Board reading: the average of every asset's Mac and Cheese scores.</p>
+<p>Tiles: solid when both scores are 4 or more the same way, outline when weaker or one-sided, yellow when they conflict.</p>
+<p>Not covered: options skew and CVOL, futures curve, gold ETF flows, PMIs and consensus forecasts, seasonality, UK and euro-area releases. Oil rests mainly on the shared backdrop plus COT and EIA stocks.</p>
+<p>Bank of England and quarterly expiry dates are provisional.</p>
+</details>
+<p class="kb">Keyboard: 1–4 filter · ← → move between assets · Esc close</p>
+</footer>
+</main>
+<div class="ov" id="ov" role="dialog" aria-modal="true" aria-label="Asset detail"><div class="sheet" id="sheet"></div></div>
+%DETS%
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<script>%JS%</script>
+</body></html>

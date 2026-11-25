@@ -1,0 +1,77 @@
+{
+ "us_macro": [
+  {
+   "date": "2026-12-04",
+   "name": "US jobs report"
+  },
+  {
+   "date": "2026-12-09",
+   "name": "Fed decision"
+  },
+  {
+   "date": "2026-12-10",
+   "name": "US CPI"
+  }
+ ],
+ "us": [
+  {
+   "date": "2026-12-04",
+   "name": "US jobs report"
+  },
+  {
+   "date": "2026-12-09",
+   "name": "Fed decision"
+  },
+  {
+   "date": "2026-12-10",
+   "name": "US CPI"
+  },
+  {
+   "date": "2026-12-18",
+   "name": "US monthly options expiry"
+  }
+ ],
+ "oil": [
+  {
+   "date": "2026-11-25",
+   "time": "19:30",
+   "name": "ICE Brent Jan options expire"
+  },
+  {
+   "date": "2026-11-30",
+   "name": "Brent Jan futures expire"
+  },
+  {
+   "date": "2026-12-02",
+   "name": "EIA oil inventories (weekly)"
+  },
+  {
+   "date": "2026-12-09",
+   "name": "EIA oil inventories (weekly)"
+  },
+  {
+   "date": "2026-12-16",
+   "name": "WTI Jan options expire"
+  }
+ ],
+ "euro": [
+  {
+   "date": "2026-12-17",
+   "name": "ECB decision"
+  },
+  {
+   "date": "2026-12-18",
+   "name": "Quarterly expiry"
+  }
+ ],
+ "uk": [
+  {
+   "date": "2026-12-17",
+   "name": "Bank of England decision"
+  },
+  {
+   "date": "2026-12-18",
+   "name": "UK/US quarterly expiry"
+  }
+ ]
+}

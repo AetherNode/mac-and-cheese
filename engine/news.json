@@ -1,0 +1,95 @@
+[
+ {
+  "tag": "Equities",
+  "headline": "Nvidia is heading for its first \u2018death cross\u2019 since March 2025 as stock continues to struggle",
+  "summary": "",
+  "source": "MarketWatch",
+  "url": "https://www.marketwatch.com/story/nvidia-is-heading-for-its-first-death-cross-since-march-2025-as-stock-continues-to-struggle-a611b99c?mod=mw_rss_topstories",
+  "affects": [
+   "US500",
+   "USTEC",
+   "US30"
+  ]
+ },
+ {
+  "tag": "United States \u00b7 Fed",
+  "headline": "The Fed says inflation hasn\u2019t gotten any better ahead of its key December vote to raise rates",
+  "summary": "",
+  "source": "MarketWatch",
+  "url": "https://www.marketwatch.com/story/the-fed-says-inflation-hasnt-gotten-any-better-ahead-of-its-key-december-vote-to-raise-rates-65024d33?mod=mw_rss_topstories",
+  "affects": [
+   "US indices",
+   "USD",
+   "Gold"
+  ]
+ },
+ {
+  "tag": "Trade",
+  "headline": "What we know about Trump's Thanksgiving tariffs",
+  "summary": "",
+  "source": "BBC News",
+  "url": "https://www.bbc.co.uk/news/videos/c3x29v11ed1xo?at_medium=RSS&at_campaign=rss",
+  "affects": [
+   "USD",
+   "US indices"
+  ]
+ },
+ {
+  "tag": "Crypto",
+  "headline": "Why macro investor Raoul Pal says the dollar is the signal to watch for stocks and crypto",
+  "summary": "",
+  "source": "MarketWatch",
+  "url": "https://www.marketwatch.com/story/why-macro-investor-raoul-pal-says-the-dollar-is-the-signal-to-watch-for-stocks-and-crypto-d36f3c49?mod=mw_rss_topstories",
+  "affects": [
+   "Bitcoin"
+  ]
+ },
+ {
+  "tag": "Equities",
+  "headline": "US stocks fall further as fears over AI intensify",
+  "summary": "",
+  "source": "BBC News",
+  "url": "https://www.bbc.co.uk/news/articles/cq0md8g14zryo?at_medium=RSS&at_campaign=rss",
+  "affects": [
+   "US500",
+   "USTEC",
+   "US30"
+  ]
+ },
+ {
+  "tag": "Equities",
+  "headline": "Why this stock-market selloff is probably going to get worse before it gets better",
+  "summary": "",
+  "source": "MarketWatch",
+  "url": "https://www.marketwatch.com/story/why-this-stock-market-selloff-is-probably-going-to-get-worse-before-it-gets-better-fce63a89?mod=mw_rss_topstories",
+  "affects": [
+   "US500",
+   "USTEC",
+   "US30"
+  ]
+ },
+ {
+  "tag": "United States \u00b7 Fed",
+  "headline": "Inflation gets worse. Now the Fed has no choice but to raise U.S. interest rates.",
+  "summary": "",
+  "source": "MarketWatch",
+  "url": "https://www.marketwatch.com/story/inflation-gets-worse-now-the-fed-no-choice-but-to-raise-u-s-interest-rates-8b0c2c1f?mod=mw_rss_topstories",
+  "affects": [
+   "US indices",
+   "USD",
+   "Gold"
+  ]
+ },
+ {
+  "tag": "Equities",
+  "headline": "HP\u2019s stock is a standout gainer in the tech rout, as an earnings beat still matters",
+  "summary": "",
+  "source": "MarketWatch",
+  "url": "https://www.marketwatch.com/story/hps-stock-is-a-standout-gainer-in-the-tech-rout-as-an-earnings-beat-still-matters-8f6c76ad?mod=mw_rss_topstories",
+  "affects": [
+   "US500",
+   "USTEC",
+   "US30"
+  ]
+ }
+]
