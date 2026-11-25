@@ -21,7 +21,7 @@ def lean(a):
     if a['state']=='Aligned': return 'long' if a['score']>0 else 'short'
     return 'mixed'
 def px(a):
-    v=a['last']; return f"{v:,.0f}" if v>=1000 else f"{v:,.2f}"
+    v=a['last']; return f"{v:,.0f}" if v>=1000 else (f"{v:.4f}" if v<20 else f"{v:,.2f}")
 def num(x): return f"{x:+d}" if x else "0"
 def mi(x): return num(x).replace('-','−')
 def short(a): return a['name'].split(' (')[0].replace(' crude','')

@@ -2,12 +2,12 @@
 import urllib.request, json, os, sys, time, re, datetime, statistics
 K=os.path.dirname(os.path.abspath(__file__))+'/'; D=K+'data/'
 UA={'User-Agent':'mac-and-cheese/1.0 (+https://aethernode.github.io/mac-and-cheese/)'}
-def get(url,tries=3):
+def get(url,tries=4):
     for i in range(tries):
         try:
             with urllib.request.urlopen(urllib.request.Request(url,headers=UA),timeout=40) as r: return r.read().decode('utf-8','replace')
         except Exception as e:
-            err=e; time.sleep(3*(i+1))
+            err=e; time.sleep([5,15,30,45][i] if '429' in str(e) else 3*(i+1))
     raise RuntimeError(f'{url}: {err}')
 fails=[]
 start=(datetime.date.today()-datetime.timedelta(days=400)).isoformat()
@@ -18,7 +18,7 @@ for s in ['BAMLH0A0HYM2','DEXJPUS','DEXUSEU','DEXUSUK','DFII10','DGS10','DGS2','
         open(D+s+'.csv','w').write(t)
     except Exception as e: fails.append(f'FRED {s}: {e}')
 q='$order=report_date_as_yyyy_mm_dd%20DESC&$limit=12'
-for kind,ds,codes in [('d','72hh-3qpy',['088691','084691','067651']),('t','gpe5-46if',['13874A','209742','239742','124603','133741'])]:
+for kind,ds,codes in [('d','72hh-3qpy',['088691','084691','067651']),('t','gpe5-46if',['13874A','209742','239742','124603','133741','099741','096742','097741','232741'])]:
     for c in codes:
         try:
             j=json.loads(get(f'https://publicreporting.cftc.gov/resource/{ds}.json?cftc_contract_market_code={c}&{q}'))
@@ -26,8 +26,13 @@ for kind,ds,codes in [('d','72hh-3qpy',['088691','084691','067651']),('t','gpe5-
             json.dump(j,open(D+f'cot_{kind}_{c}.json','w'))
         except Exception as e: fails.append(f'CFTC {c}: {e}')
 # Yahoo chart API (unofficial)
-S=['GC=F','SI=F','^FTSE','^GDAXI','^STOXX50E','^RUT','CL=F','BZ=F','^GSPC','^NDX','^DJI','^N225','BTC-USD','^VIX','DX-Y.NYB']
+S=['GC=F','SI=F','^FTSE','^GDAXI','^STOXX50E','^RUT','CL=F','BZ=F','^GSPC','^NDX','^DJI','^N225','BTC-USD','^VIX','DX-Y.NYB','EURUSD=X','GBPUSD=X','JPY=X','AUDUSD=X','HG=F']
 rows=['sym|date|last|d1|d5|d20|sma50|sma200|hi|lo']
+old={}
+try:
+    old={l.split('|')[0]:l for l in open(D+'yahoo_1y.psv').read().strip().split('\n')[1:]}
+except Exception: pass
+stale=[]
 for s in S:
     try:
         u='https://query1.finance.yahoo.com/v8/finance/chart/'+urllib.request.quote(s,safe='')+'?range=1y&interval=1d&includePrePost=false'
@@ -38,10 +43,12 @@ for s in S:
         if live and lt:
             if day(lt)==day(pts[-1][0]): pts[-1][1]=live
             elif day(lt)>day(pts[-1][0]): pts.append([lt,live])
-        v=[p[1] for p in pts]; n=len(v); avg=lambda k:sum(v[-k:])/min(k,n); f=lambda x:f'{x:.2f}'
+        v=[p[1] for p in pts]; n=len(v); avg=lambda k:sum(v[-k:])/min(k,n); f=lambda x:f'{x:.5f}' if x<20 else f'{x:.2f}'
         rows.append('|'.join([s,day(pts[-1][0]),f(v[-1]),f(v[-2]),f(v[-6]),f(v[-21]),f(avg(50)),f(avg(200)),f(max(v)),f(min(v))]))
-        time.sleep(0.6)
-    except Exception as e: fails.append(f'Yahoo {s}: {e}')
+        time.sleep(1.0)
+    except Exception as e:
+        if s in old: rows.append(old[s]); stale.append(s)
+        else: fails.append(f'Yahoo {s}: {e}')
 if len(rows)==len(S)+1: open(D+'yahoo_1y.psv','w').write('\n'.join(rows)+'\n')
 # EIA weekly crude stocks (excluding SPR)
 try:
@@ -58,4 +65,5 @@ try:
 except Exception as e: fails.append(f'EIA: {e}')
 print('\n'.join(fails) if fails else 'all data fetched')
 # Prices are essential; other sources fall back to the last saved files.
-if any(x.startswith('Yahoo') for x in fails): sys.exit('Price fetch failed; site not updated.')
+if stale: print('kept last price for: '+', '.join(stale))
+if any(x.startswith('Yahoo') for x in fails) or len(stale)>len(S)//3: sys.exit('Price fetch failed; site not updated.')

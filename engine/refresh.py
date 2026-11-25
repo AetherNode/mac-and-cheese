@@ -5,7 +5,7 @@ K=os.path.dirname(os.path.abspath(__file__))+'/'
 def dm(d): return f"{d.day} {d.strftime('%b')}"
 now=datetime.datetime.now(ZoneInfo('Europe/London'))
 Y={l.split('|')[0]:l.split('|')[1] for l in open(K+'data/yahoo_1y.psv').read().strip().split('\n')[1:] if '|' in l}
-need=['GC=F','SI=F','^FTSE','^GDAXI','^STOXX50E','^RUT','CL=F','BZ=F','^GSPC','^NDX','^DJI','^N225','BTC-USD','^VIX','DX-Y.NYB']
+need=['GC=F','SI=F','^FTSE','^GDAXI','^STOXX50E','^RUT','CL=F','BZ=F','^GSPC','^NDX','^DJI','^N225','BTC-USD','^VIX','DX-Y.NYB','EURUSD=X','GBPUSD=X','JPY=X','AUDUSD=X','HG=F']
 miss=[s for s in need if s not in Y]
 if miss: sys.exit('Missing Yahoo symbols: '+', '.join(miss))
 pxd=max(Y.values()); lag=[s for s in need if Y[s]<pxd]
@@ -25,7 +25,7 @@ meta={"asof_iso":now.astimezone(datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:
 json.dump(meta,open(K+'meta.json','w'),indent=1)
 n=json.load(open(K+'news.json')); assert 3<=len(n)<=10 and all(x['headline'] and x['url'].startswith('http') for x in n), 'news.json invalid'
 subprocess.run([sys.executable,'-I',K+'score.py'],check=True,stdout=subprocess.DEVNULL)
-B=json.load(open(K+'out/board.json')); assert len(B['assets'])==13
+B=json.load(open(K+'out/board.json')); assert len(B['assets'])==17
 subprocess.run([sys.executable,'-I',K+'render4.py'],check=True)
 ev=json.load(open(K+'events.json')); today=now.date()
 for g,xs in ev.items():

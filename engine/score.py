@@ -15,6 +15,7 @@ for l in open(D+'yahoo_1y.psv').read().strip().split('\n')[1:]:
 def pct(a,b): return (a/b-1)*100
 real,real5,real_d=chg('DFII10',5)
 y10,y10_5,y10_d=chg('DGS10',5)
+y2,y2_5,y2_d=chg('DGS2',5)
 be,be5,be_d=chg('T10YIE',5)
 hy,hy5,hy_d=chg('BAMLH0A0HYM2',5)
 gbp,gbp20,gbp_d=chg('DEXUSUK',20)
@@ -29,7 +30,7 @@ def _cot(kind,code):
     if kind=='d': net=g('m_money_positions_long_all')-g('m_money_positions_short_all'); wk=g('change_in_m_money_long_all')-g('change_in_m_money_short_all')
     else: net=g('lev_money_positions_long')-g('lev_money_positions_short'); wk=g('change_in_lev_money_long')-g('change_in_lev_money_short')
     return (net,wk,g('open_interest_all'),r['report_date_as_yyyy_mm_dd'][:10])
-COT={'gold':_cot('d','088691'),'silver':_cot('d','084691'),'wti':_cot('d','067651'),'sp':_cot('t','13874A'),'ndx':_cot('t','209742'),'rut':_cot('t','239742'),'dow':_cot('t','124603'),'btc':_cot('t','133741')}
+COT={'gold':_cot('d','088691'),'silver':_cot('d','084691'),'wti':_cot('d','067651'),'sp':_cot('t','13874A'),'ndx':_cot('t','209742'),'rut':_cot('t','239742'),'dow':_cot('t','124603'),'btc':_cot('t','133741'),'eur':_cot('t','099741'),'gbp':_cot('t','096742'),'jpy':_cot('t','097741'),'aud':_cot('t','232741')}
 def _dm(iso): d=datetime.date.fromisoformat(iso); return f"{d.day} {d.strftime('%b')}"
 COTD=_dm(COT['gold'][3])
 LIVE=META['yahoo_label']
@@ -58,13 +59,14 @@ def d_claims():
 def d_cot(k,label,flip=False):
     net,wk,oi,rank=COT[k]; r=wk/oi*100
     pts=1 if r>1 else (-1 if r<-1 else 0)
+    if flip: pts=-pts
     return D_(label,f"net {net/1000:+.0f}k, {wk/1000:+.0f}k last week ({r:+.1f}% of OI)",pts,1,f'CFTC, report date {COTD}')
 def d_cot_info(k,label):
     net,wk,oi,rank=COT[k]
     return D_(label,f"net {net/1000:+.0f}k, {wk/1000:+.0f}k last week; shown, not scored",0,0,f'CFTC, report date {COTD}')
 A=[]
 def side(x): return 1 if x>=2 else (-1 if x<=-2 else 0)
-def asset(key,name,yk,group,drivers,events):
+def asset(key,name,yk,group,drivers,events,th=(3,1.5)):
     p=Y[yk]
     sm=sum(d['pts']*d['w'] for d in drivers); mx=sum(d['w'] for d in drivers)
     score=int(round(10*sm/mx)) if mx else 0
@@ -74,7 +76,7 @@ def asset(key,name,yk,group,drivers,events):
     conv='High' if abs(score)>=6 and agree>=0.6 else 'Medium' if abs(score)>=3 else 'Low'
     d5=pct(p['last'],p['d5']); d20=pct(p['last'],p['d20'])
     v50=pct(p['last'],p['sma50']); v200=pct(p['last'],p['sma200']); x=pct(p['sma50'],p['sma200'])
-    T=[('Price vs 50-day',f"{v50:+.1f}%",1 if v50>0 else -1),('Price vs 200-day',f"{v200:+.1f}%",1 if v200>0 else -1),('50-day vs 200-day',f"{x:+.1f}%",1 if x>0 else -1),('20-day move',f"{d20:+.1f}%",1 if d20>3 else (-1 if d20<-3 else 0)),('5-day move',f"{d5:+.1f}%",1 if d5>1.5 else (-1 if d5<-1.5 else 0))]
+    T=[('Price vs 50-day',f"{v50:+.1f}%",1 if v50>0 else -1),('Price vs 200-day',f"{v200:+.1f}%",1 if v200>0 else -1),('50-day vs 200-day',f"{x:+.1f}%",1 if x>0 else -1),('20-day move',f"{d20:+.1f}%",1 if d20>th[0] else (-1 if d20<-th[0] else 0)),('5-day move',f"{d5:+.1f}%",1 if d5>th[1] else (-1 if d5<-th[1] else 0))]
     trend=int(round(10*sum(t[2] for t in T)/len(T)))
     sm_,st_=side(score),side(trend)
     if sm_!=0 and sm_==st_: state='Aligned'
@@ -119,6 +121,23 @@ eurd=[d_vix(),d_credit(),D_('Euro',f"EUR/USD {eur:.3f}, {eur_p:+.1f}% in 20 days
 asset('de','DE40 (DAX)','^GDAXI','UK, Europe, Japan',eurd,evs('euro'))
 asset('eu','EU50 (Euro Stoxx 50)','^STOXX50E','UK, Europe, Japan',eurd,evs('euro'))
 asset('jp','JP225 (Nikkei)','^N225','UK, Europe, Japan',[d_vix(),d_credit(),D_('Yen',f"USD/JPY {jpy:.1f}, {jpy_p:+.1f}% in 20 days (weak yen helps)",1 if jpy_p>1 else (-1 if jpy_p<-1 else 0),1,f'FRED DEXJPUS, {jpy_d}'),d_nfci()],evs('us_macro',3))
+# currencies: points are for the pair as quoted (+ = pair up)
+FXT=(1.5,0.75)
+def fx_vix(w):
+    spike=pct(vix['last'],vix['d5']); pts=-1 if (vix['last']>25 or spike>30) else (1 if vix['last']<16 else 0)
+    return D_('Risk appetite (VIX)',f"{vix['last']:.1f}, {spike:+.0f}% in 5 days",pts,w,f'Yahoo ^VIX, {LIVE}')
+def fx_us2(usd_base):
+    s_=1 if y2_5>0.08 else (-1 if y2_5<-0.08 else 0)
+    return D_('US 2y yield',f"{y2:.2f}%, {y2_5:+.2f} in 5 days",s_ if usd_base else -s_,1,f'FRED DGS2, {y2_d}')
+def fx_dollar(usd_base):
+    d=d_dxy('Broad dollar'); 
+    if usd_base: d['pts']=-d['pts']
+    return d
+cu=pct(Y['HG=F']['last'],Y['HG=F']['d20'])
+asset('eurusd','EURUSD','EURUSD=X','Currencies',[fx_us2(False),fx_dollar(False),fx_vix(1),d_cot('eur','COT leveraged funds (euro)')],sorted(evs('euro')+evs('us_macro',3),key=lambda z:z[2])[:4],FXT)
+asset('gbpusd','GBPUSD','GBPUSD=X','Currencies',[fx_us2(False),fx_dollar(False),fx_vix(1),d_cot('gbp','COT leveraged funds (sterling)')],sorted(evs('uk')+evs('us_macro',3),key=lambda z:z[2])[:4],FXT)
+asset('usdjpy','USDJPY','JPY=X','Currencies',[fx_us2(True),fx_dollar(True),fx_vix(1),d_cot('jpy','COT leveraged funds (yen)',flip=True)],evs('us_macro',3),FXT)
+asset('audusd','AUDUSD','AUDUSD=X','Currencies',[fx_us2(False),fx_vix(2),d_credit(),D_('Copper',f"{cu:+.1f}% in 20 days",1 if cu>3 else (-1 if cu<-3 else 0),1,f'Yahoo HG=F, {LIVE}'),d_cot('aud','COT leveraged funds (Aussie)')],evs('us_macro',3),FXT)
 asset('btc','Bitcoin','BTC-USD','Crypto',[d_vix(),d_credit(),d_dxy(),d_real(),d_nfci(),d_cot_info('btc','COT CME leveraged funds')],evs('us_macro',3))
 regime=dict(vix=vix['last'],vix5=pct(vix['last'],vix['d5']),hy=hy,hy5=hy5,hy_d=hy_d,dxy=dxy['last'],dxy50=pct(dxy['last'],dxy['sma50']),y10=y10,y10_5=y10_5,real=real,real5=real5,nfci=nfci,ics=ics,be=be)
 json.dump(dict(assets=A,regime=regime,asof=META['asof_label']),open(K+'out/board.json','w'),indent=1)
